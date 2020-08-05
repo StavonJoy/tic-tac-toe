@@ -1,104 +1,61 @@
 /*------Constants------*/
 const colors = {
-    playerX: 'red',
-    playerO: 'blue',
-    emptySqr: 'white',
+    'null': 'red',
+    '1': 'O',
+    '-1': 'X',
 }
 
-const winCombos = {
-    topRow: [sq0, sq1, sq2],
-    midRow: [sq3, sq4, sq5],
-    btmRow: [sq6, sq7, sq8],
-    leftColumn: [sq0, sq3, sq6],
-    midColumn: [sq1, sq4, sq7],
-    rightColumn: [sq2, sq5, sq8],
-    diagDown: [sq0, sq4, sq8],
-    diagUp: [sq6, sq4, sq2]
-}
+
 /*------Variables (state)------*/
 
 // Variables might include (board/turn/winner)
-const playerXChoices = [];
-const playerOChoices = [];
-let board = [];
-let winner;
+let board, turn, winner;
+let turnCount = 1;
 /*------Cached Element References------*/
 
-const sqEl0 = document.getElementById('sq0');
-const sqEl1 = document.getElementById('sq1');
-const sqEl2 = document.getElementById('sq2');
-const sqEl3 = document.getElementById('sq3');
-const sqEl4 = document.getElementById('sq4');
-const sqEl5 = document.getElementById('sq5');
-const sqEl6 = document.getElementById('sq6');
-const sqEl7 = document.getElementById('sq7');
-const sqEl8 = document.getElementById('sq8');
+let boardEl = document.getElementsByClassName('board')
 // You might choose to put your game status here
-
+let gameStatus = document.getElementById('message')
 
 /*------Event Listeners------*/
 // 
 // This is where you should put the event listener
 // for a mouse-click
- sqEl0.addEventListener('click', function(){
-     console.log('sq0');
-    //create function for each square
- })
- sqEl1.addEventListener('click', function(){
-    console.log('sq1');
-})
-sqEl2.addEventListener('click', function(){
-    console.log('sq2');
-})
-sqEl3.addEventListener('click', function(){
-    console.log('sq3');
-})
-sqEl4.addEventListener('click', function(){
-    console.log('sq4');
-})
-sqEl5.addEventListener('click', function(){
-    console.log('sq5');
-})
-sqEl6.addEventListener('click', function(){
-    console.log('sq6');
-})
-sqEl7.addEventListener('click', function(){
-    console.log('sq7');
-})
-sqEl8.addEventListener('click', function(){
-    console.log('sq8');
-})
+document.getElementById('board').addEventListener('click', clickHandle);
+document.getElementById('reset').addEventListener('click', reset);
 
 /*------Functions------*/
 
 
 // Some functions you might choose to use:
 
+
 // Initialization function:
 // let winner: null;
 // let turn: 1;
 // let player: 1;
+function init() {
+    board = [null, null, null, null, null, null, null, null, null];
+    winner = null;
+    turn = 1;
+}
+// render the board
+// loop over the 9 elements, for each:
+//  - use index of the iteration to access mapped value from the board array
+//  - set the background color of current element using the value as a key on the colors lookup object
+
 
 // On-Click function:
 // Set up what happens when one of the elements
-// is clicked
-// if element === ' ', proceed 
-// if turn === 1, playerXclick
-// else, playerOClick
-// 
-
-
-function playerXClick0() {
-    sqEl0.innerText = 'X';
-    sqEl0.color = white;
+function clickHandle(evt) {
+    let squareIndex = parseInt(evt.target.id.replace('sq',''));
+        console.log(squareIndex);
+        if(board[squareIndex] !== null){
+            return;
+        }
+    render(squareIndex);
 }
-function playerXClick1() {
-    sqEl1.innerText = 'X';
-    sqEl1.color = white;
-}
-// set inner text to 'X'
-// set color of text to pink
-// store id of square to an array
+
 
 
 // Check winner function:
@@ -106,16 +63,51 @@ function playerXClick1() {
 // forEach winCombos, compare playerChoices to each array in winCombos
 // if one matches, set winner to the player
 
-
 // Checks the current state of the board for
 // a winner and changes the state of the winner
 // variable if so
+
+const winCombos = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [6, 4, 2]
+]
+function checkWin() {
+    for (let i = 0; i < winCombos.length; i++) {
+        if (Math.abs(board[winCombos[i][0]] + board[winCombos[i][1]] + board[winCombos[i][2]]) === 3) {
+         winner = turn; 
+         gameStatus.textContent = `Congrats ${colors[turn]}!`;
+        }
+    } return winner;
+}
 
 
 // Render function:
 // Displays the current state of the board
 // on the page, updating the elements to reflect
 // either X or O depending on whose turn it is
-function render() {
-    
+function render(squareIdx){
+    if (winner === null) {
+        addLetter = document.getElementById(`sq${squareIdx}`);
+        board[squareIdx] = turn;
+        if (turn === 1) {
+            addLetter.textContent = "X";
+            gameStatus.textContent = "Player O's turn";
+        }   else {
+            addLetter.textContent = "O";
+            gameStatus.textContent = "Player X's turn";
+        }
+    }
+    turn *= -1;
+    checkWin();
 }
+
+function reset() {
+    console.log('hello')
+}
+init();
