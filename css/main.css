@@ -1,6 +1,7 @@
 body {
   font-family: 'Kreon', serif;
-  background-color: indianred;
+  background: rgb(232,255,94);
+  background: radial-gradient(circle, rgba(232,255,94,1) 0%, rgba(131,227,123,1) 47%, rgba(25,191,146,1) 66%, rgba(0,151,149,1) 80%, rgba(4,111,128,1) 90%, rgba(47,72,88,1) 100%);
   text-align: center;
   height: 100vh;
   display: flex;
@@ -29,8 +30,3 @@ div {
 }
 
 
-#reset {
-  margin: 0 auto;
-  font-family: 'Kreon', serif;
-  font-size: 20px;
-}
